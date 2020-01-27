@@ -25,6 +25,9 @@ public class MultiplePlayersActivity extends AppCompatActivity {
     private UiHelper uiHelper;
     private MediaMetadataRetriever retriever = new MediaMetadataRetriever();
     private List<VideoInfo> videoInfoList;
+    private List<String> filenames = Arrays.asList("Smoke01.mp4", "Smoke02.mp4",
+            "SmokeOutro.mp4", "SwimmingClip.mp4", "LightLeakFXBackground.mp4",
+            "LightLeaksDefaultClip.mp4");
 
     /** Activity methods */
 
@@ -41,9 +44,6 @@ public class MultiplePlayersActivity extends AppCompatActivity {
     /** Private methods */
 
     private void setupFiles() {
-        final List<String> filenames = Arrays.asList("Smoke01.mp4", "Smoke02.mp4",
-                "SmokeOutro.mp4", "SwimmingClip.mp4");
-
         filenames.forEach(filename -> FileUtils.copyAssetToFilesDir(this, filename));
 
         videoInfoList = filenames.stream()
@@ -64,25 +64,28 @@ public class MultiplePlayersActivity extends AppCompatActivity {
     }
 
     private void setupViews() {
-        if (videoInfoList == null || videoInfoList.size() != 4) {
+        if (videoInfoList == null || videoInfoList.size() != filenames.size()) {
             uiHelper.showLongSnackbar(R.string.err_copy_asset);
             return;
         }
 
-        loadVideoFile(videoInfoList.get(0), binding.videoViewTopLeft);
-        loadVideoFile(videoInfoList.get(1), binding.videoViewTopRight);
-        loadVideoFile(videoInfoList.get(2), binding.videoViewBottomLeft);
-        loadVideoFile(videoInfoList.get(3), binding.videoViewBottomRight);
+        loadVideoFile(videoInfoList.get(0), binding.videoView11);
+        loadVideoFile(videoInfoList.get(1), binding.videoView12);
+        loadVideoFile(videoInfoList.get(2), binding.videoView21);
+        loadVideoFile(videoInfoList.get(3), binding.videoView22);
+        loadVideoFile(videoInfoList.get(4), binding.videoView31);
+        loadVideoFile(videoInfoList.get(5), binding.videoView32);
 
         binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 double ratio = progress / 100.0;
-                long pos = Math.round(binding.videoViewTopLeft.getDuration() * ratio);
-                binding.videoViewTopLeft.seekTo((int) pos);
-                binding.videoViewTopRight.seekTo((int) pos);
-                binding.videoViewBottomLeft.seekTo((int) pos);
-                binding.videoViewBottomRight.seekTo((int) pos);
+                seekToRatio(binding.videoView11, ratio);
+                seekToRatio(binding.videoView12, ratio);
+                seekToRatio(binding.videoView21, ratio);
+                seekToRatio(binding.videoView22, ratio);
+                seekToRatio(binding.videoView31, ratio);
+                seekToRatio(binding.videoView32, ratio);
             }
 
             @Override
@@ -101,5 +104,10 @@ public class MultiplePlayersActivity extends AppCompatActivity {
         view.setVideoPath(info.getPath());
         view.pause();
         view.seekTo(1);
+    }
+
+    private void seekToRatio(VideoView view, double ratio) {
+        long pos = Math.round(view.getDuration() * ratio);
+        view.seekTo((int) pos);
     }
 }

@@ -36,7 +36,7 @@ public class SeekVideoViewActivity extends AppCompatActivity {
     /** Private methods */
 
     private void setupFiles() {
-        final String filename = "toy-story.mp4";
+        final String filename = "SkiClip.mp4";
         if (!FileUtils.copyAssetToFilesDir(this, filename)) {
             uiHelper.showLongSnackbar(R.string.err_copy_asset);
             return;

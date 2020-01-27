@@ -12,6 +12,7 @@ import com.lightricks.videotricks.R;
 import com.lightricks.videotricks.databinding.ActivityMultiplePlayersBinding;
 import com.lightricks.videotricks.model.VideoInfo;
 import com.lightricks.videotricks.util.FileUtils;
+import com.lightricks.videotricks.util.LayoutUtils;
 import com.lightricks.videotricks.util.UiHelper;
 
 import java.io.File;
@@ -25,9 +26,10 @@ public class MultiplePlayersActivity extends AppCompatActivity {
     private UiHelper uiHelper;
     private MediaMetadataRetriever retriever = new MediaMetadataRetriever();
     private List<VideoInfo> videoInfoList;
-    private List<String> filenames = Arrays.asList("Smoke01.mp4", "Smoke02.mp4",
-            "SmokeOutro.mp4", "SwimmingClip.mp4", "LightLeakFXBackground.mp4",
-            "LightLeaksDefaultClip.mp4");
+    private List<String> filenames = Arrays.asList("BaseballQuotClip.mp4", "BreakfastClip.mp4",
+            "BusinessAdvisorsDefaultClip.mp4", "HairSalonDefaultClip.mp4",
+            "KidsMusicLessonsClip.mp4", "LanguageStudyClip.mp4", "LightLeaksDefaultClip.mp4",
+            "LuxuryCarsClip.mp4", "SkiClip.mp4", "Top5PlacesThisFallClip.mp4");
 
     /** Activity methods */
 
@@ -44,7 +46,11 @@ public class MultiplePlayersActivity extends AppCompatActivity {
     /** Private methods */
 
     private void setupFiles() {
-        filenames.forEach(filename -> FileUtils.copyAssetToFilesDir(this, filename));
+        filenames.forEach(filename -> {
+            if (!FileUtils.fileExists(this, filename)) {
+                FileUtils.copyAssetToFilesDir(this, filename);
+            }
+        });
 
         videoInfoList = filenames.stream()
                 .map(filename -> new File(getFilesDir(), filename))
@@ -75,17 +81,26 @@ public class MultiplePlayersActivity extends AppCompatActivity {
         loadVideoFile(videoInfoList.get(3), binding.videoView22);
         loadVideoFile(videoInfoList.get(4), binding.videoView31);
         loadVideoFile(videoInfoList.get(5), binding.videoView32);
+        loadVideoFile(videoInfoList.get(6), binding.videoView41);
+        loadVideoFile(videoInfoList.get(7), binding.videoView42);
+        loadVideoFile(videoInfoList.get(8), binding.videoView51);
+        loadVideoFile(videoInfoList.get(9), binding.videoView52);
 
         binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 double ratio = progress / 100.0;
+
                 seekToRatio(binding.videoView11, ratio);
                 seekToRatio(binding.videoView12, ratio);
                 seekToRatio(binding.videoView21, ratio);
                 seekToRatio(binding.videoView22, ratio);
                 seekToRatio(binding.videoView31, ratio);
                 seekToRatio(binding.videoView32, ratio);
+                seekToRatio(binding.videoView41, ratio);
+                seekToRatio(binding.videoView42, ratio);
+                seekToRatio(binding.videoView51, ratio);
+                seekToRatio(binding.videoView52, ratio);
             }
 
             @Override
@@ -101,6 +116,10 @@ public class MultiplePlayersActivity extends AppCompatActivity {
     }
 
     private void loadVideoFile(VideoInfo info, VideoView view) {
+        float ratio = info.getWidth() / (float) info.getHeight();
+        LayoutUtils.applyDimensionRatio(binding.constraintLayout, view.getId(),
+                String.valueOf(ratio));
+
         view.setVideoPath(info.getPath());
         view.pause();
         view.seekTo(1);

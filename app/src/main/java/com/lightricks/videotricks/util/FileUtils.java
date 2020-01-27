@@ -25,6 +25,11 @@ public class FileUtils {
         }
     }
 
+    public static boolean fileExists(Context context, String filename) {
+        File file = new File(context.getFilesDir(), filename);
+        return file.exists();
+    }
+
     private static void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;

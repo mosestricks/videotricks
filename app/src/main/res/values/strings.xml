@@ -2,4 +2,5 @@
     <string name="app_name">VideoTricks</string>
     <string name="err_copy_asset">Failed to copy a file from the assets</string>
     <string name="seek_video_view">Seek in VideoView</string>
+    <string name="multiple_players">Multiple Players</string>
 </resources>

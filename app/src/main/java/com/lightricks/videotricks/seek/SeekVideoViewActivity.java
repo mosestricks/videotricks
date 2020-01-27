@@ -21,6 +21,8 @@ public class SeekVideoViewActivity extends AppCompatActivity {
     private UiHelper uiHelper;
     private VideoInfo videoInfo;
 
+    /** Activity methods */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,8 @@ public class SeekVideoViewActivity extends AppCompatActivity {
         setupFiles();
         setupViews();
     }
+
+    /** Private methods */
 
     private void setupFiles() {
         final String filename = "toy-story.mp4";

@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import com.lightricks.videotricks.R;
 import com.lightricks.videotricks.databinding.ActivityHomeBinding;
+import com.lightricks.videotricks.seek.MultiplePlayersActivity;
 import com.lightricks.videotricks.seek.SeekVideoViewActivity;
 import com.lightricks.videotricks.util.ClickableListAdapter;
 
@@ -22,10 +23,12 @@ import static java.util.stream.Collectors.toList;
 public class HomeActivity extends AppCompatActivity {
     private int[] labelResIds = new int[] {
             R.string.seek_video_view,
+            R.string.multiple_players,
     };
 
     private Class[] activityClasses = new Class[] {
             SeekVideoViewActivity.class,
+            MultiplePlayersActivity.class,
     };
 
     private ActivityHomeBinding binding;
@@ -49,7 +52,8 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView.Adapter makeAdapter() {
         ClickableListAdapter adapter = new ClickableListAdapter();
         adapter.setLabels(getLabels());
-        adapter.setClickListener(((position, label) -> startActivityClass(activityClasses[position])));
+        adapter.setClickListener(((position, label) ->
+                startActivityClass(activityClasses[position])));
         return adapter;
     }
 

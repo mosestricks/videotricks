@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="48dp"
+            tools:context=".seek.SeekVideoViewActivity">
+
+            <VideoView
+                android:id="@+id/video_view_top_left"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/video_view_top_right"
+                app:layout_constraintBottom_toTopOf="@+id/video_view_bottom_left"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintVertical_chainStyle="packed"/>
+
+            <VideoView
+                android:id="@+id/video_view_top_right"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="2dp"
+                app:layout_constraintStart_toEndOf="@+id/video_view_top_left"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/video_view_bottom_right"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintVertical_chainStyle="packed"/>
+
+            <VideoView
+                android:id="@+id/video_view_bottom_left"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/video_view_top_left"
+                app:layout_constraintEnd_toStartOf="@+id/video_view_bottom_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"/>
+
+            <VideoView
+                android:id="@+id/video_view_bottom_right"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="2dp"
+                app:layout_constraintStart_toEndOf="@+id/video_view_bottom_left"
+                app:layout_constraintTop_toBottomOf="@+id/video_view_top_right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"/>
+
+            <SeekBar
+                android:id="@+id/seek_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/video_view_bottom_left"
+                app:layout_constraintStart_toStartOf="@+id/video_view_bottom_left"
+                app:layout_constraintEnd_toEndOf="@+id/video_view_bottom_right" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

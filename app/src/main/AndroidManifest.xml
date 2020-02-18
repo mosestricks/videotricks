@@ -30,6 +30,11 @@
             android:label="@string/multiple_players"
             android:parentActivityName=".home.HomeActivity"/>
 
+        <activity
+            android:name=".stats.CollectStatsActivity"
+            android:label="@string/collect_stats"
+            android:parentActivityName=".home.HomeActivity"/>
+
     </application>
 
 </manifest>

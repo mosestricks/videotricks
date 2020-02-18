@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout"
+            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="24dp"
@@ -18,7 +18,7 @@
             tools:context=".seek.SeekVideoViewActivity">
 
             <VideoView
-                android:id="@+id/video_view"
+                android:id="@+id/video"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -32,9 +32,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
-                app:layout_constraintBottom_toBottomOf="@+id/video_view"
-                app:layout_constraintEnd_toEndOf="@+id/video_view"
-                app:layout_constraintStart_toStartOf="@+id/video_view" />
+                app:layout_constraintBottom_toBottomOf="@+id/video"
+                app:layout_constraintEnd_toEndOf="@+id/video"
+                app:layout_constraintStart_toStartOf="@+id/video" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

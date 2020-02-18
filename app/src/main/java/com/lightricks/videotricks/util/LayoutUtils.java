@@ -1,6 +1,3 @@
-// Copyright (c) 2019 Lightricks. All rights reserved.
-// Created by Boris Maximenko.
-
 package com.lightricks.videotricks.util;
 
 import android.view.View;

@@ -64,19 +64,19 @@ public class SeekVideoViewActivity extends AppCompatActivity {
         }
 
         float ratio = videoInfo.getWidth() / (float) videoInfo.getHeight();
-        LayoutUtils.applyDimensionRatio(binding.constraintLayout, R.id.video_view,
+        LayoutUtils.applyDimensionRatio(binding.layout, R.id.video,
                 String.valueOf(ratio));
 
-        binding.videoView.setVideoPath(videoInfo.getPath());
-        binding.videoView.pause();
-        binding.videoView.seekTo(1);
+        binding.video.setVideoPath(videoInfo.getPath());
+        binding.video.pause();
+        binding.video.seekTo(1);
 
         binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 double ratio = progress / 100.0;
-                long pos = Math.round(binding.videoView.getDuration() * ratio);
-                binding.videoView.seekTo((int) pos);
+                long pos = Math.round(binding.video.getDuration() * ratio);
+                binding.video.seekTo((int) pos);
             }
 
             @Override

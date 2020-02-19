@@ -1,5 +1,6 @@
 package com.lightricks.videotricks.stats;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaMetadataRetriever;
@@ -24,9 +25,12 @@ import com.lightricks.videotricks.util.MediaUtils;
 import com.lightricks.videotricks.util.UiHelper;
 
 public class CollectStatsViewModel extends AndroidViewModel {
-    private MutableLiveData<String> outputText = new MutableLiveData<>();
+    private MutableLiveData<String> promptText = new MutableLiveData<>();
+    private MutableLiveData<Integer> promptVisibility = new MutableLiveData<>();
+    private MutableLiveData<Integer> tableVisibility = new MutableLiveData<>();
     private MutableLiveData<Integer> progressVisibility = new MutableLiveData<>();
     private MutableLiveData<Integer> buttonVisibility = new MutableLiveData<>();
+    private MutableLiveData<StatsTableData> tableData = new MutableLiveData<>();
     private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
     private StatsCollector statsCollector = new StatsCollector();
     private VideoWriter videoWriter;
@@ -45,8 +49,16 @@ public class CollectStatsViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<String> getOutputText() {
-        return outputText;
+    public LiveData<String> getPromptText() {
+        return promptText;
+    }
+
+    public LiveData<Integer> getPromptVisibility() {
+        return promptVisibility;
+    }
+
+    public LiveData<Integer> getTableVisibility() {
+        return tableVisibility;
     }
 
     public LiveData<Integer> getProgressVisibility() {
@@ -57,8 +69,11 @@ public class CollectStatsViewModel extends AndroidViewModel {
         return buttonVisibility;
     }
 
-    @SuppressWarnings("unused")
-    public void onButtonClick(View ignored) {
+    public LiveData<StatsTableData> getTableData() {
+        return tableData;
+    }
+
+    public void onButtonClick(@SuppressWarnings("unused") View ignored) {
         collectStats();
     }
 
@@ -77,11 +92,11 @@ public class CollectStatsViewModel extends AndroidViewModel {
     /** Private methods */
 
     private void reset() {
-        outputText.setValue(getApplication().getString(R.string.collect_stats_prompt,
+        showPrompt(getApplication().getString(R.string.collect_stats_prompt,
                 Constants.VIDEO_FILE_NAME));
-
-        buttonVisibility.setValue(View.VISIBLE);
-        progressVisibility.setValue(View.GONE);
+        showButton();
+        hideProgress();
+        hideTable();
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -105,6 +120,7 @@ public class CollectStatsViewModel extends AndroidViewModel {
                 videoWriter.getSurface());
 
         videoReader.setSamplesHandler(statsCollector::acceptSample);
+        videoReader.setDryRun(true);
     }
 
     private VideoMetadata getMetadata(DataSource dataSource) {
@@ -128,30 +144,68 @@ public class CollectStatsViewModel extends AndroidViewModel {
     }
 
     private void collectStats() {
-        progressVisibility.setValue(View.VISIBLE);
-        buttonVisibility.setValue(View.GONE);
+        showProgress();
+        hideButton();
         videoReader.start().thenAcceptAsync(this::handleComplete, uiThreadHandler::post);
     }
 
     @SuppressWarnings("unused")
     private void handleComplete(Void nothing) {
-        progressVisibility.setValue(View.GONE);
-        showStats();
-    }
-
-    private void showStats() {
-        int samplesCount = statsCollector.getSamplesCount();
-        long actualDuration = statsCollector.getActualDuration();
-        StatsCollector.Stats deltaStats = statsCollector.getTimeDeltaStats();
-        double fps = 1e6 / deltaStats.avg;
-        outputText.setValue(getApplication().getString(R.string.collect_stats_result,
-                (long) samplesCount, actualDuration / 1000, (long) deltaStats.min / 1000,
-                (long) deltaStats.max / 1000, (long) deltaStats.avg / 1000, (long) fps));
+        hideProgress();
+        hidePrompt();
+        showTable();
     }
 
     private void handleError(String message) {
         uiHelper.showLongSnackbar(message);
         reset();
+    }
+
+    private void showPrompt(String prompt) {
+        promptText.setValue(prompt);
+        promptVisibility.setValue(View.VISIBLE);
+    }
+
+    private void hidePrompt() {
+        promptVisibility.setValue(View.GONE);
+    }
+
+    private void showTable() {
+        tableVisibility.setValue(View.VISIBLE);
+
+        StatsCollector.Stats deltaStats = statsCollector.getTimeDeltaStats();
+        @SuppressLint("DefaultLocale")
+        StatsTableData data = new StatsTableData(Constants.VIDEO_FILE_NAME,
+                String.format("%d ms", videoReader.getDurationUs() / 1000),
+                String.format("%d", videoReader.getFrameRate()),
+                String.format("%d", statsCollector.getSamplesCount()),
+                String.format("%d ms", statsCollector.getActualDuration() / 1000),
+                String.format("%d ms", (int) (deltaStats.min / 1000)),
+                String.format("%d ms", (int) (deltaStats.max / 1000)),
+                String.format("%d ms", (int) (deltaStats.avg / 1000)),
+                String.format("%d", (int) (1e6 / deltaStats.avg)));
+
+        tableData.setValue(data);
+    }
+
+    private void hideTable() {
+        tableVisibility.setValue(View.GONE);
+    }
+
+    private void showProgress() {
+        progressVisibility.setValue(View.VISIBLE);
+    }
+
+    private void hideProgress() {
+        progressVisibility.setValue(View.GONE);
+    }
+
+    private void showButton() {
+        buttonVisibility.setValue(View.VISIBLE);
+    }
+
+    private void hideButton() {
+        buttonVisibility.setValue(View.GONE);
     }
 
     static class Constants {

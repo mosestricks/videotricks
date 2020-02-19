@@ -8,7 +8,13 @@
     <!-- Collect Stats -->
     <string name="collect_stats">Collect Stats</string>
     <string name="collect_stats_prompt">Tap the button to collect the stats from the file: %s</string>
-    <string name="collect_stats_result">Samples count:\t%d\nActual duration:\t%d ms\nMin time delta:\t%d ms\nMax time delta:\t%d ms\nAvg time delta:\t%d ms\nAvg FPS:\t%d</string>
-    <string name="go">Go!</string>
-    <string name="view">View</string>
+    <string name="file_name_label">File name:</string>
+    <string name="reported_duration_label">Reported duration:</string>
+    <string name="reported_fps_label">Reported FPS:</string>
+    <string name="sample_count_label">Sample count:</string>
+    <string name="actual_duration_label">Actual duration:</string>
+    <string name="min_time_label">Min time delta:</string>
+    <string name="max_time_label">Max time delta:</string>
+    <string name="avg_time_label">Avg time delta:</string>
+    <string name="avg_fps_label">Avg actual FPS:</string>
 </resources>

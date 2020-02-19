@@ -130,12 +130,11 @@ public class CollectStatsViewModel extends AndroidViewModel {
     private void collectStats() {
         progressVisibility.setValue(View.VISIBLE);
         buttonVisibility.setValue(View.GONE);
-        videoReader.start().thenAcceptAsync(this::handleStats, uiThreadHandler::post);
+        videoReader.start().thenAcceptAsync(this::handleComplete, uiThreadHandler::post);
     }
 
     @SuppressWarnings("unused")
-    private void handleStats(Void nothing) {
-        buttonVisibility.setValue(View.VISIBLE);
+    private void handleComplete(Void nothing) {
         progressVisibility.setValue(View.GONE);
         showStats();
     }

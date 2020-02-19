@@ -51,7 +51,7 @@
                 android:layout_margin="24dp"
                 android:visibility="@{vm.buttonVisibility}"
                 android:onClick="@{vm::onButtonClick}"
-                android:src="@drawable/ic_sync"
+                android:src="@drawable/ic_send"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 

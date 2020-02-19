@@ -19,15 +19,15 @@
             android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="24dp"
             tools:context=".seek.SeekVideoViewActivity">
 
             <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
+                android:id="@+id/output"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="24dp"
                 android:textSize="20sp"
-                android:text="@{vm.statusText}"
+                android:text="@{vm.outputText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -41,20 +41,19 @@
                 android:visibility="@{vm.progressVisibility}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/status"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <Button
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:text="@{vm.buttonText}"
+                android:layout_margin="24dp"
                 android:visibility="@{vm.buttonVisibility}"
                 android:onClick="@{vm::onButtonClick}"
-                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/ic_sync"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/status"
-                tools:text="Go!"/>
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

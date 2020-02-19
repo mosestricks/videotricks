@@ -9,11 +9,13 @@ import android.view.Surface;
 
 import androidx.annotation.NonNull;
 
+import com.lightricks.videotricks.model.SampleInfo;
 import com.lightricks.videotricks.util.DataSource;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class VideoReader {
     private final MediaExtractor mediaExtractor;
@@ -21,6 +23,7 @@ public class VideoReader {
     private final Handler handler;
     private final MediaCodec codec;
     private final DataSource dataSource;
+    private Consumer<SampleInfo> samplesHandler;
     private CompletableFuture<Void> job;
 
     public VideoReader(DataSource dataSource, CodecProvider codecProvider, int trackId,
@@ -53,6 +56,10 @@ public class VideoReader {
                 .orElseThrow(() -> new RuntimeException("Could not create codec"));
     }
 
+    public void setSamplesHandler(Consumer<SampleInfo> samplesHandler) {
+        this.samplesHandler = samplesHandler;
+    }
+
     public CompletableFuture<Void> start() {
         handler.post(codec::start);
         job = new CompletableFuture<>();
@@ -81,6 +88,10 @@ public class VideoReader {
         long ptsUs = mediaExtractor.getSampleTime();
         int sampleFlags = mediaExtractor.getSampleFlags();
 
+        if (samplesHandler != null) {
+            samplesHandler.accept(new SampleInfo(ptsUs, sampleSize, sampleFlags));
+        }
+
         try {
             codec.queueInputBuffer(bufferIndex, 0, sampleSize, ptsUs, sampleFlags);
         } catch (MediaCodec.CodecException e) {
@@ -92,9 +103,8 @@ public class VideoReader {
 
     private void handleOutputBuffer(int bufferIndex, MediaCodec.BufferInfo bufferInfo) {
         boolean isEOS = (bufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0;
-        boolean isEmpty = bufferInfo.size == 0;
+        //boolean isEmpty = bufferInfo.size == 0;
 
-        //todo
         //codec.releaseOutputBuffer(bufferIndex, !isEmpty);
         codec.releaseOutputBuffer(bufferIndex, false);
 

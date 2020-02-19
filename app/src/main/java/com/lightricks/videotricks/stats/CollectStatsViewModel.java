@@ -22,15 +22,14 @@ import com.lightricks.videotricks.util.MediaUtils;
 import com.lightricks.videotricks.util.UiHelper;
 
 public class CollectStatsViewModel extends AndroidViewModel {
-    private MutableLiveData<String> statusText = new MutableLiveData<>();
+    private MutableLiveData<String> outputText = new MutableLiveData<>();
     private MutableLiveData<Integer> progressVisibility = new MutableLiveData<>();
     private MutableLiveData<Integer> buttonVisibility = new MutableLiveData<>();
-    private MutableLiveData<String> buttonText = new MutableLiveData<>();
     private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
+    private StatsCollector statsCollector = new StatsCollector();
     private VideoWriter videoWriter;
     private VideoReader videoReader;
     private UiHelper uiHelper;
-    private boolean statsAreReady;
 
     public CollectStatsViewModel(@NonNull Application application) {
         super(application);
@@ -44,8 +43,8 @@ public class CollectStatsViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<String> getStatusText() {
-        return statusText;
+    public LiveData<String> getOutputText() {
+        return outputText;
     }
 
     public LiveData<Integer> getProgressVisibility() {
@@ -56,17 +55,9 @@ public class CollectStatsViewModel extends AndroidViewModel {
         return buttonVisibility;
     }
 
-    public LiveData<String> getButtonText() {
-        return buttonText;
-    }
-
     @SuppressWarnings("unused")
     public void onButtonClick(View ignored) {
-        if (statsAreReady) {
-            viewStats();
-        } else {
-            collectStats();
-        }
+        collectStats();
     }
 
     void setUiHelper(UiHelper uiHelper) {
@@ -84,11 +75,10 @@ public class CollectStatsViewModel extends AndroidViewModel {
     /** Private methods */
 
     private void reset() {
-        statusText.setValue(getApplication().getString(R.string.collect_stats_prompt,
+        outputText.setValue(getApplication().getString(R.string.collect_stats_prompt,
                 Constants.VIDEO_FILE_NAME));
 
         buttonVisibility.setValue(View.VISIBLE);
-        buttonText.setValue(getApplication().getString(R.string.go));
         progressVisibility.setValue(View.GONE);
     }
 
@@ -109,6 +99,8 @@ public class CollectStatsViewModel extends AndroidViewModel {
 
         videoReader = new VideoReader(dataSource, new CodecProvider(), trackId,
                 videoWriter.getSurface());
+
+        videoReader.setSamplesHandler(statsCollector::acceptSample);
     }
 
     private void collectStats() {
@@ -117,16 +109,21 @@ public class CollectStatsViewModel extends AndroidViewModel {
         videoReader.start().thenAcceptAsync(this::handleStats, uiThreadHandler::post);
     }
 
-    private void viewStats() {
-        // todo
-    }
-
     @SuppressWarnings("unused")
     private void handleStats(Void nothing) {
         buttonVisibility.setValue(View.VISIBLE);
         progressVisibility.setValue(View.GONE);
-        buttonText.setValue(getApplication().getString(R.string.view));
-        statsAreReady = true;
+        showStats();
+    }
+
+    private void showStats() {
+        int samplesCount = statsCollector.getSamplesCount();
+        long actualDuration = statsCollector.getActualDuration();
+        StatsCollector.Stats deltaStats = statsCollector.getTimeDeltaStats();
+        double fps = 1e6 / deltaStats.avg;
+        outputText.setValue(getApplication().getString(R.string.collect_stats_result,
+                (long) samplesCount, actualDuration / 1000, (long) deltaStats.min / 1000,
+                (long) deltaStats.max / 1000, (long) deltaStats.avg / 1000, (long) fps));
     }
 
     private void handleError(String message) {

@@ -7,7 +7,8 @@
     <string name="multiple_players">Multiple Players</string>
     <!-- Collect Stats -->
     <string name="collect_stats">Collect Stats</string>
-    <string name="collect_stats_prompt">Tap the button to collect the stats from file: %s</string>
+    <string name="collect_stats_prompt">Tap the button to collect the stats from the file: %s</string>
+    <string name="collect_stats_result">Samples count:\t%d\nActual duration:\t%d ms\nMin time delta:\t%d ms\nMax time delta:\t%d ms\nAvg time delta:\t%d ms\nAvg FPS:\t%d</string>
     <string name="go">Go!</string>
     <string name="view">View</string>
 </resources>

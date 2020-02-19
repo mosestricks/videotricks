@@ -26,6 +26,7 @@ public class VideoReader {
     private final MediaFormat inputFormat;
     private Consumer<SampleInfo> samplesHandler;
     private CompletableFuture<Void> job;
+    private boolean isDryRun;
 
     public VideoReader(DataSource dataSource, CodecProvider codecProvider, int trackId,
                        Surface outputSurface) {
@@ -59,6 +60,10 @@ public class VideoReader {
 
     public void setSamplesHandler(Consumer<SampleInfo> samplesHandler) {
         this.samplesHandler = samplesHandler;
+    }
+
+    public void setDryRun(boolean dryRun) {
+        isDryRun = dryRun;
     }
 
     public CompletableFuture<Void> start() {
@@ -112,10 +117,13 @@ public class VideoReader {
 
     private void handleOutputBuffer(int bufferIndex, MediaCodec.BufferInfo bufferInfo) {
         boolean isEOS = (bufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0;
-        //boolean isEmpty = bufferInfo.size == 0;
+        boolean isEmpty = bufferInfo.size == 0;
 
-        //codec.releaseOutputBuffer(bufferIndex, !isEmpty);
-        codec.releaseOutputBuffer(bufferIndex, false);
+        if (isDryRun) {
+            codec.releaseOutputBuffer(bufferIndex, false);
+        } else {
+            codec.releaseOutputBuffer(bufferIndex, !isEmpty);
+        }
 
         if (isEOS) {
             job.complete(null);

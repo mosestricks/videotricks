@@ -2,6 +2,7 @@ package com.lightricks.videotricks.stats;
 
 import android.app.Application;
 import android.content.res.AssetFileDescriptor;
+import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Size;
@@ -17,6 +18,7 @@ import com.lightricks.videotricks.media.CodecProvider;
 import com.lightricks.videotricks.media.VideoEncoderCodecProvider;
 import com.lightricks.videotricks.media.VideoReader;
 import com.lightricks.videotricks.media.VideoWriter;
+import com.lightricks.videotricks.model.VideoMetadata;
 import com.lightricks.videotricks.util.DataSource;
 import com.lightricks.videotricks.util.MediaUtils;
 import com.lightricks.videotricks.util.UiHelper;
@@ -84,15 +86,17 @@ public class CollectStatsViewModel extends AndroidViewModel {
 
     @SuppressWarnings("SameParameterValue")
     private void setupVideoPipeline(String filename) throws Exception {
-        CodecProvider encoderProvider = new VideoEncoderCodecProvider(Constants.VIDEO_SIZE,
+        AssetFileDescriptor fd = getApplication().getAssets().openFd(filename);
+        DataSource dataSource = new DataSource(fd.getFileDescriptor(), fd.getStartOffset(),
+                fd.getLength(), fd);
+
+        VideoMetadata metadata = getMetadata(dataSource);
+        Size videoSize = new Size(metadata.getWidth(), metadata.getHeight());
+        CodecProvider encoderProvider = new VideoEncoderCodecProvider(videoSize,
                 Constants.VIDEO_MIME, Constants.VIDEO_BIT_RATE, Constants.VIDEO_FPS,
                 Constants.VIDEO_I_FRAME_INTERVAL);
 
-        videoWriter = new VideoWriter(Constants.VIDEO_SIZE, Constants.VIDEO_MIME, encoderProvider);
-
-        AssetFileDescriptor afd = getApplication().getAssets().openFd(filename);
-        DataSource dataSource = new DataSource(afd.getFileDescriptor(), afd.getStartOffset(),
-                afd.getLength(), afd);
+        videoWriter = new VideoWriter(videoSize, Constants.VIDEO_MIME, encoderProvider);
 
         int trackId = MediaUtils.firstVideoTrack(dataSource)
                 .orElseThrow(() -> new RuntimeException("Video track not found in " + filename));
@@ -101,6 +105,26 @@ public class CollectStatsViewModel extends AndroidViewModel {
                 videoWriter.getSurface());
 
         videoReader.setSamplesHandler(statsCollector::acceptSample);
+    }
+
+    private VideoMetadata getMetadata(DataSource dataSource) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(dataSource.getFileDescriptor(), dataSource.getOffset(),
+                dataSource.getLength());
+
+        int width = Integer.parseInt(retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
+
+        int height = Integer.parseInt(retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+
+        int duration = Integer.parseInt(retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_DURATION));
+
+        int rotation = Integer.parseInt(retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
+
+        return new VideoMetadata(width, height, duration, rotation);
     }
 
     private void collectStats() {
@@ -133,7 +157,6 @@ public class CollectStatsViewModel extends AndroidViewModel {
 
     static class Constants {
         static final String VIDEO_FILE_NAME = "SocialMediaLoveClip.mp4";
-        static final Size VIDEO_SIZE = new Size(1280, 720);
         static final String VIDEO_MIME = "video/avc";
         static final int VIDEO_BIT_RATE = 16_000_000;
         static final int VIDEO_FPS = 30;

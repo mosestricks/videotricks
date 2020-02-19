@@ -23,6 +23,7 @@ public class VideoReader {
     private final Handler handler;
     private final MediaCodec codec;
     private final DataSource dataSource;
+    private final MediaFormat inputFormat;
     private Consumer<SampleInfo> samplesHandler;
     private CompletableFuture<Void> job;
 
@@ -43,7 +44,7 @@ public class VideoReader {
             throw new RuntimeException(ioe);
         }
 
-        MediaFormat inputFormat = mediaExtractor.getTrackFormat(trackId);
+        inputFormat = mediaExtractor.getTrackFormat(trackId);
         final String mimeType = inputFormat.getString(MediaFormat.KEY_MIME);
         if (mimeType == null) {
             throw new RuntimeException("MIME type of the video asset could not be determined");
@@ -69,6 +70,14 @@ public class VideoReader {
     public CompletableFuture<Void> dispose() {
         return CompletableFuture.runAsync(this::releaseResources, handler::post)
                 .thenRun(handlerThread::quit);
+    }
+
+    public long getDurationUs() {
+        return inputFormat.getLong(MediaFormat.KEY_DURATION);
+    }
+
+    public long getFrameRate() {
+        return inputFormat.getInteger(MediaFormat.KEY_FRAME_RATE);
     }
 
     /** Private methods */

@@ -41,12 +41,6 @@ public class CollectStatsViewModel extends AndroidViewModel {
         super(application);
 
         reset();
-
-        try {
-            setupVideoPipeline(Constants.VIDEO_FILE_NAME);
-        } catch (Exception e) {
-            handleError(e.getMessage());
-        }
     }
 
     public LiveData<String> getPromptText() {
@@ -79,6 +73,14 @@ public class CollectStatsViewModel extends AndroidViewModel {
 
     void setUiHelper(UiHelper uiHelper) {
         this.uiHelper = uiHelper;
+    }
+
+    void setupVideoPipeline() {
+        try {
+            setupVideoPipeline(Constants.VIDEO_FILE_NAME);
+        } catch (Exception e) {
+            handleError(e.getMessage());
+        }
     }
 
     /** ViewModel methods */

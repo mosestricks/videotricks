@@ -22,17 +22,22 @@
 
         <activity
             android:name=".seek.SeekVideoViewActivity"
-            android:label="@string/seek_video_view"
+            android:label="@string/seek_video_view_label"
             android:parentActivityName=".home.HomeActivity" />
 
         <activity
             android:name=".seek.MultiplePlayersActivity"
-            android:label="@string/multiple_players"
+            android:label="@string/multiple_players_label"
             android:parentActivityName=".home.HomeActivity"/>
 
         <activity
             android:name=".stats.CollectStatsActivity"
-            android:label="@string/collect_stats"
+            android:label="@string/collect_stats_label"
+            android:parentActivityName=".home.HomeActivity"/>
+
+        <activity
+            android:name=".surface.SurfacePlayerActivity"
+            android:label="@string/surface_player_label"
             android:parentActivityName=".home.HomeActivity"/>
 
     </application>

@@ -12,31 +12,20 @@ import com.lightricks.videotricks.databinding.ActivityCollectStatsBinding;
 import com.lightricks.videotricks.util.UiHelper;
 
 public class CollectStatsActivity extends AppCompatActivity {
-    private CollectStatsViewModel viewModel;
-    private ActivityCollectStatsBinding dataBinding;
-
     @Override
     protected void onCreate(@Nullable Bundle state) {
         super.onCreate(state);
 
-        setupViewModel();
-        setupViews();
-        setupUiHelper();
-    }
+        CollectStatsViewModel viewModel = ViewModelProviders.of(this)
+                .get(CollectStatsViewModel.class);
 
-    /** Private methods */
+        ActivityCollectStatsBinding dataBinding = DataBindingUtil.setContentView(this,
+                R.layout.activity_collect_stats);
 
-    private void setupViewModel() {
-        viewModel = ViewModelProviders.of(this).get(CollectStatsViewModel.class);
-    }
-
-    private void setupViews() {
-        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_collect_stats);
         dataBinding.setVm(viewModel);
         dataBinding.setLifecycleOwner(this);
-    }
 
-    private void setupUiHelper() {
         viewModel.setUiHelper(new UiHelper(this, dataBinding.coordinator));
+        viewModel.setupVideoPipeline();
     }
 }

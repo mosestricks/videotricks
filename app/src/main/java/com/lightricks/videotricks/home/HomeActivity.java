@@ -14,6 +14,7 @@ import com.lightricks.videotricks.databinding.ActivityHomeBinding;
 import com.lightricks.videotricks.seek.MultiplePlayersActivity;
 import com.lightricks.videotricks.seek.SeekVideoViewActivity;
 import com.lightricks.videotricks.stats.CollectStatsActivity;
+import com.lightricks.videotricks.surface.SurfacePlayerActivity;
 import com.lightricks.videotricks.util.ClickableListAdapter;
 
 import java.util.List;
@@ -23,15 +24,18 @@ import static java.util.stream.Collectors.toList;
 
 public class HomeActivity extends AppCompatActivity {
     private int[] labelResIds = new int[] {
-            R.string.seek_video_view,
-            R.string.multiple_players,
-            R.string.collect_stats,
+            R.string.seek_video_view_label,
+            R.string.multiple_players_label,
+            R.string.collect_stats_label,
+            R.string.surface_player_label,
+
     };
 
     private Class[] activityClasses = new Class[] {
             SeekVideoViewActivity.class,
             MultiplePlayersActivity.class,
             CollectStatsActivity.class,
+            SurfacePlayerActivity.class,
     };
 
     private ActivityHomeBinding binding;

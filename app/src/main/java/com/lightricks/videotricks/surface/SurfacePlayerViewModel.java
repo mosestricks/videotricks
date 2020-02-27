@@ -72,7 +72,7 @@ public class SurfacePlayerViewModel extends AndroidViewModel implements SurfaceH
     @Override
     protected void onCleared() {
         videoReader.dispose().join();
-        videoPlayer.dispose().join();
+        videoPlayer.dispose();
     }
 
     /** SurfaceHolder.Callback impl. */

@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Global -->
     <string name="app_name">VideoTricks</string>
-    <string name="home_screen_label" translatable="false">@string/app_name</string>
     <string name="err_copy_asset">Failed to copy a file from the assets</string>
     <!-- Seek in VideoView(s) -->
     <string name="seek_video_view_label">Seek in VideoView</string>

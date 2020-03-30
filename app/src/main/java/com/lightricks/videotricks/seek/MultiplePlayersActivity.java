@@ -34,8 +34,8 @@ public class MultiplePlayersActivity extends AppCompatActivity {
     /** Activity methods */
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle state) {
+        super.onCreate(state);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_multiple_players);
         uiHelper = new UiHelper(this, binding.coordinator);

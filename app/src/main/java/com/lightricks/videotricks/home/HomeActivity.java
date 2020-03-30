@@ -28,7 +28,6 @@ public class HomeActivity extends AppCompatActivity {
             R.string.multiple_players_label,
             R.string.collect_stats_label,
             R.string.surface_player_label,
-
     };
 
     private Class[] activityClasses = new Class[] {
@@ -41,8 +40,8 @@ public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle state) {
+        super.onCreate(state);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         setupViews();

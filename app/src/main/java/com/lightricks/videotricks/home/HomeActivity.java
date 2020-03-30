@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.lightricks.videotricks.R;
 import com.lightricks.videotricks.databinding.ActivityHomeBinding;
@@ -47,8 +46,6 @@ public class HomeActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         setupViews();
-        Toast.makeText(this, R.string.home_screen_label, Toast.LENGTH_LONG)
-                .show();
     }
 
     private void setupViews() {

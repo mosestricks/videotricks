@@ -11,7 +11,6 @@ import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.renderscript.Type;
 import android.util.Size;
 import android.view.Surface;
-import android.view.SurfaceHolder;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -51,12 +50,8 @@ public class VideoPlayer implements Allocation.OnBufferAvailableListener, Playba
         yuvToRGB.setInput(input);
     }
 
-    public void surfaceCreated(SurfaceHolder holder) {
-        output.setSurface(holder.getSurface());
-    }
-
-    public void surfaceDestroyed() {
-        output.setSurface(null);
+    public void surfaceCreated(Surface surface) {
+        output.setSurface(surface);
     }
 
     public Surface getInputSurface() {

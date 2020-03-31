@@ -15,6 +15,7 @@ import com.lightricks.videotricks.seek.MultiplePlayersActivity;
 import com.lightricks.videotricks.seek.SeekVideoViewActivity;
 import com.lightricks.videotricks.stats.CollectStatsActivity;
 import com.lightricks.videotricks.surface.SurfacePlayerActivity;
+import com.lightricks.videotricks.texture.TexturePlayerActivity;
 import com.lightricks.videotricks.util.ClickableListAdapter;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
             R.string.multiple_players_label,
             R.string.collect_stats_label,
             R.string.surface_player_label,
+            R.string.texture_player_label,
     };
 
     private Class[] activityClasses = new Class[] {
@@ -35,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
             MultiplePlayersActivity.class,
             CollectStatsActivity.class,
             SurfacePlayerActivity.class,
+            TexturePlayerActivity.class,
     };
 
     private ActivityHomeBinding binding;

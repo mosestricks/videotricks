@@ -19,4 +19,6 @@
     <string name="avg_fps_label">Avg actual FPS:</string>
     <!-- Surface Player -->
     <string name="surface_player_label">Surface Player</string>
+    <!-- Texture Player -->
+    <string name="texture_player_label">Texture Player</string>
 </resources>

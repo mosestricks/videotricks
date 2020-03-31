@@ -1,13 +1,15 @@
-package com.lightricks.videotricks.surface;
+package com.lightricks.videotricks.texture;
 
 import android.app.Application;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.SurfaceTexture;
 import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.os.Looper;
 import android.renderscript.RenderScript;
 import android.util.Size;
-import android.view.SurfaceHolder;
+import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -23,7 +25,9 @@ import com.lightricks.videotricks.util.DataSource;
 import com.lightricks.videotricks.util.MediaUtils;
 import com.lightricks.videotricks.util.UiHelper;
 
-public class SurfacePlayerViewModel extends AndroidViewModel implements SurfaceHolder.Callback {
+public class TexturePlayerViewModel extends AndroidViewModel implements
+        TextureView.SurfaceTextureListener {
+
     private MutableLiveData<Integer> seekBarVisibility = new MutableLiveData<>();
     private MutableLiveData<Integer> buttonVisibility = new MutableLiveData<>();
     private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
@@ -32,7 +36,7 @@ public class SurfacePlayerViewModel extends AndroidViewModel implements SurfaceH
     private UiHelper uiHelper;
     private Size videoSize;
 
-    public SurfacePlayerViewModel(@NonNull Application application) {
+    public TexturePlayerViewModel(@NonNull Application application) {
         super(application);
 
         seekBarVisibility.setValue(View.GONE);
@@ -66,7 +70,6 @@ public class SurfacePlayerViewModel extends AndroidViewModel implements SurfaceH
     Size getVideoSize() {
         return videoSize;
     }
-
     /** ViewModel methods */
 
     @Override
@@ -75,20 +78,26 @@ public class SurfacePlayerViewModel extends AndroidViewModel implements SurfaceH
         videoPlayer.dispose();
     }
 
-    /** SurfaceHolder.Callback impl. */
+    /** SurfaceTextureListener impl. */
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        videoPlayer.surfaceCreated(holder.getSurface());
+    public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
+        Surface surface = new Surface(surfaceTexture);
+        videoPlayer.surfaceCreated(surface);
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
         // no action
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        return true;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
         // no action
     }
 

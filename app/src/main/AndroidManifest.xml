@@ -40,6 +40,11 @@
             android:label="@string/surface_player_label"
             android:parentActivityName=".home.HomeActivity"/>
 
+        <activity
+            android:name=".texture.TexturePlayerActivity"
+            android:label="@string/texture_player_label"
+            android:parentActivityName=".home.HomeActivity"/>
+
     </application>
 
 </manifest>

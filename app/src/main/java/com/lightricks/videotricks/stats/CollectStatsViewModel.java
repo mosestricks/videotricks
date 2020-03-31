@@ -6,6 +6,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Size;
 import android.view.View;
 
@@ -36,6 +37,7 @@ public class CollectStatsViewModel extends AndroidViewModel {
     private VideoWriter videoWriter;
     private VideoReader videoReader;
     private UiHelper uiHelper;
+    private long start;
 
     public CollectStatsViewModel(@NonNull Application application) {
         super(application);
@@ -148,13 +150,17 @@ public class CollectStatsViewModel extends AndroidViewModel {
     private void collectStats() {
         showProgress();
         hideButton();
+        start = SystemClock.uptimeMillis();
         videoReader.start().thenAcceptAsync(this::handleComplete, uiThreadHandler::post);
     }
 
     @SuppressWarnings("unused")
     private void handleComplete(Void nothing) {
+        long elapsed = SystemClock.uptimeMillis() - start;
+        start = 0;
         hideProgress();
         hidePrompt();
+        showReadSpeed(elapsed);
         showTable();
     }
 
@@ -170,6 +176,14 @@ public class CollectStatsViewModel extends AndroidViewModel {
 
     private void hidePrompt() {
         promptVisibility.setValue(View.GONE);
+    }
+
+    private void showReadSpeed(long elapsed) {
+        int sampleCount = statsCollector.getSamplesCount();
+        long rate = sampleCount * 1000 / elapsed;
+        @SuppressLint("DefaultLocale")
+        String msg = String.format("Read speed: %d samples per second", rate);
+        uiHelper.showLongSnackbar(msg);
     }
 
     private void showTable() {

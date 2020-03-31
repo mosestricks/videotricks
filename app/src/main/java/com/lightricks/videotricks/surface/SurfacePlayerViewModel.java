@@ -109,7 +109,7 @@ public class SurfacePlayerViewModel extends AndroidViewModel implements SurfaceH
                 .orElseThrow(() -> new RuntimeException("Video track not found in " + filename));
 
         videoReader = new VideoReader(dataSource, new CodecProvider(), trackId,
-                videoPlayer.getInputSurface());
+                videoPlayer.getInputSurface(), videoPlayer);
     }
 
     private VideoMetadata getMetadata(DataSource dataSource) {

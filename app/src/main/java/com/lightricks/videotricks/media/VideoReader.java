@@ -26,11 +26,13 @@ public class VideoReader {
     private final MediaFormat inputFormat;
     private Consumer<SampleInfo> samplesHandler;
     private CompletableFuture<Void> job;
+    private PlaybackControl playbackControl;
     private boolean isDryRun;
 
     public VideoReader(DataSource dataSource, CodecProvider codecProvider, int trackId,
-                       Surface outputSurface) {
+                       Surface outputSurface, PlaybackControl playbackControl) {
         this.dataSource = dataSource;
+        this.playbackControl = playbackControl;
 
         handlerThread = new HandlerThread("VideoReader");
         handlerThread.start();
@@ -122,6 +124,10 @@ public class VideoReader {
         if (isDryRun) {
             codec.releaseOutputBuffer(bufferIndex, false);
         } else {
+            // Block until it's time to release the frame.
+            playbackControl.completeAt(bufferInfo.presentationTimeUs)
+                    .join();
+
             codec.releaseOutputBuffer(bufferIndex, !isEmpty);
         }
 

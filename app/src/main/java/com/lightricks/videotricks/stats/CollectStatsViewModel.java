@@ -25,6 +25,8 @@ import com.lightricks.videotricks.util.DataSource;
 import com.lightricks.videotricks.util.MediaUtils;
 import com.lightricks.videotricks.util.UiHelper;
 
+import java.util.concurrent.CompletableFuture;
+
 public class CollectStatsViewModel extends AndroidViewModel {
     private MutableLiveData<String> promptText = new MutableLiveData<>();
     private MutableLiveData<Integer> promptVisibility = new MutableLiveData<>();
@@ -121,7 +123,7 @@ public class CollectStatsViewModel extends AndroidViewModel {
                 .orElseThrow(() -> new RuntimeException("Video track not found in " + filename));
 
         videoReader = new VideoReader(dataSource, new CodecProvider(), trackId,
-                videoWriter.getSurface());
+                videoWriter.getSurface(), pts -> CompletableFuture.completedFuture(null));
 
         videoReader.setSamplesHandler(statsCollector::acceptSample);
         videoReader.setDryRun(true);

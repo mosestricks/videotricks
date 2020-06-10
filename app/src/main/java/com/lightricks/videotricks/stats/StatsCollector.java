@@ -4,6 +4,7 @@ import com.lightricks.videotricks.model.SampleInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.OptionalDouble;
 import java.util.OptionalLong;
 import java.util.stream.Collectors;
@@ -20,20 +21,10 @@ class StatsCollector {
         return inputSamples.size();
     }
 
-    long getActualDuration() {
-        OptionalLong minTime = inputSamples.stream()
+    LongSummaryStatistics getPtsStat() {
+        return inputSamples.stream()
                 .mapToLong(SampleInfo::getPresentationTimeUs)
-                .min();
-
-        OptionalLong maxTime = inputSamples.stream()
-                .mapToLong(SampleInfo::getPresentationTimeUs)
-                .max();
-
-        if (minTime.isPresent() && maxTime.isPresent()) {
-            return maxTime.getAsLong() - minTime.getAsLong();
-        }
-
-        return 0;
+                .summaryStatistics();
     }
 
     Stats getSizeStats() {

@@ -132,6 +132,28 @@
             <!-- Actual duration -->
 
             <TextView
+                android:id="@+id/min_pts_label"
+                android:layout_width="@dimen/stats_label_width"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:textSize="@dimen/stats_table_text_size"
+                android:text="@string/min_pts_label"
+                android:visibility="@{vm.tableVisibility}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sample_count_label"/>
+
+            <TextView
+                android:id="@+id/max_pts_label"
+                android:layout_width="@dimen/stats_label_width"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:textSize="@dimen/stats_table_text_size"
+                android:text="@string/max_pts_label"
+                android:visibility="@{vm.tableVisibility}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/min_pts_label"/>
+
+            <TextView
                 android:id="@+id/actual_duration_label"
                 android:layout_width="@dimen/stats_label_width"
                 android:layout_height="wrap_content"
@@ -140,7 +162,33 @@
                 android:text="@string/actual_duration_label"
                 android:visibility="@{vm.tableVisibility}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sample_count_label"/>
+                app:layout_constraintTop_toBottomOf="@id/max_pts_label"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:textSize="@dimen/stats_table_text_size"
+                android:ellipsize="end"
+                android:text="@{vm.tableData.minPts}"
+                android:visibility="@{vm.tableVisibility}"
+                app:layout_constraintStart_toEndOf="@id/min_pts_label"
+                app:layout_constraintTop_toTopOf="@id/min_pts_label"
+                app:layout_constraintBottom_toBottomOf="@id/min_pts_label"
+                tools:text="123"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:textSize="@dimen/stats_table_text_size"
+                android:ellipsize="end"
+                android:text="@{vm.tableData.maxPts}"
+                android:visibility="@{vm.tableVisibility}"
+                app:layout_constraintStart_toEndOf="@id/max_pts_label"
+                app:layout_constraintTop_toTopOf="@id/max_pts_label"
+                app:layout_constraintBottom_toBottomOf="@id/max_pts_label"
+                tools:text="123"/>
 
             <TextView
                 android:layout_width="wrap_content"

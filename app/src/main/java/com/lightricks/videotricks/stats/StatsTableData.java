@@ -5,6 +5,8 @@ public class StatsTableData {
     private final String reportedDuration;
     private final String reportedFps;
     private final String sampleCount;
+    private final String minPts;
+    private final String maxPts;
     private final String actualDuration;
     private final String minTimeDelta;
     private final String maxTimeDelta;
@@ -12,12 +14,15 @@ public class StatsTableData {
     private final String avgActualFps;
 
     public StatsTableData(String filename, String reportedDuration, String reportedFps,
-                          String sampleCount, String actualDuration, String minTimeDelta,
-                          String maxTimeDelta, String avgTimeDelta, String avgActualFps) {
+                          String sampleCount, String minPts, String maxPts,
+                          String actualDuration, String minTimeDelta, String maxTimeDelta,
+                          String avgTimeDelta, String avgActualFps) {
         this.filename = filename;
         this.reportedDuration = reportedDuration;
         this.reportedFps = reportedFps;
         this.sampleCount = sampleCount;
+        this.minPts = minPts;
+        this.maxPts = maxPts;
         this.actualDuration = actualDuration;
         this.minTimeDelta = minTimeDelta;
         this.maxTimeDelta = maxTimeDelta;
@@ -39,6 +44,14 @@ public class StatsTableData {
 
     public String getSampleCount() {
         return sampleCount;
+    }
+
+    public String getMinPts() {
+        return minPts;
+    }
+
+    public String getMaxPts() {
+        return maxPts;
     }
 
     public String getActualDuration() {

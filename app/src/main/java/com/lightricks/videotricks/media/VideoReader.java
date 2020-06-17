@@ -28,7 +28,6 @@ public class VideoReader {
     private CompletableFuture<Void> job;
     private PlaybackControl playbackControl;
     private boolean isDryRun;
-    private long maxPtsObsereved = 0;
 
     public VideoReader(DataSource dataSource, CodecProvider codecProvider, int trackId,
                        Surface outputSurface, PlaybackControl playbackControl) {
@@ -80,10 +79,6 @@ public class VideoReader {
                 .thenRun(handlerThread::quit);
     }
 
-    public long getMaxPtsObsereved() {
-        return maxPtsObsereved;
-    }
-
     public long getDurationUs() {
         return inputFormat.getLong(MediaFormat.KEY_DURATION);
     }
@@ -125,9 +120,6 @@ public class VideoReader {
     private void handleOutputBuffer(int bufferIndex, MediaCodec.BufferInfo bufferInfo) {
         boolean isEOS = (bufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0;
         boolean isEmpty = bufferInfo.size == 0;
-        if (bufferInfo.presentationTimeUs > maxPtsObsereved) {
-            maxPtsObsereved = bufferInfo.presentationTimeUs;
-        }
         if (isDryRun) {
             codec.releaseOutputBuffer(bufferIndex, false);
         } else {

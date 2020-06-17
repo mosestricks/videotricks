@@ -27,20 +27,10 @@ class StatsCollector {
                 .summaryStatistics();
     }
 
-    Stats getSizeStats() {
-        OptionalLong minSize = inputSamples.stream()
+    LongSummaryStatistics getSizeStats() {
+        return inputSamples.stream()
                 .mapToLong(SampleInfo::getSize)
-                .min();
-
-        OptionalDouble avgSize = inputSamples.stream()
-                .mapToLong(SampleInfo::getSize)
-                .average();
-
-        OptionalLong maxSize = inputSamples.stream()
-                .mapToLong(SampleInfo::getSize)
-                .max();
-
-        return new Stats(minSize.getAsLong(), maxSize.getAsLong(), avgSize.getAsDouble());
+                .summaryStatistics();
     }
 
     Stats getTimeDeltaStats() {
